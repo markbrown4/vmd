@@ -324,6 +324,21 @@ document.addEventListener('dragover', function (ev) {
   ev.stopPropagation()
 })
 
+var searchInput = document.getElementById('search-input')
+var contents = currentWindow.webContents;
+contents.on('found-in-page', (event, result) => {
+  searchInput.focus()
+})
+
+searchInput.addEventListener('input', function(ev) {
+  const text = ev.target.value
+  if (text !== '') {
+    contents.findInPage(text)
+  } else {
+    contents.stopFindInPage('clearSelection')
+  }
+})
+
 setInterval(function () {
   updateSelection()
 }, 1000)
